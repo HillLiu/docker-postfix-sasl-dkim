@@ -9,7 +9,6 @@ RUN  apk update \
        opendkim \
        opendkim-utils \
        ca-certificates \
-       tzdata \
        supervisor \
        rsyslog \
        musl \
