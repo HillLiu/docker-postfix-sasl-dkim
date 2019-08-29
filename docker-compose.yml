@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  mail:
+    image: hillliu/postfix-sasl-dkms
+    environment:
+      - MTA_DOMAIN=example.com
+      - MTA_HOST=mail.example.com
+      - MTA_USERS=test_user:test_password
+      - DEBUG=true
+    ports:
+      - "${MAIL_PORT:-25}:25"
