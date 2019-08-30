@@ -221,6 +221,7 @@ EOF
     echo "OpenDKIM: Configuring Postfix..."
     postconf -e 'smtpd_milters = inet:127.0.0.1:8891'
     postconf -e 'non_smtpd_milters=$smtpd_milters'
+    postconf -e 'milter_protocol=2'
     postconf -e 'milter_default_action=accept'
 
     echo "Postfix: Fixed aliases."
