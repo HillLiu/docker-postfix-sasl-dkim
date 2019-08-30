@@ -13,6 +13,7 @@ RUN  apk update \
        rsyslog \
        musl \
        musl-utils \
+       nano \
       && (rm "/tmp/"* 2>/dev/null || true) \
       && (rm -rf /var/cache/apk/* 2>/dev/null || true)
 

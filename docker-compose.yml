@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mail:
-    image: hillliu/postfix-sasl-dkim
+    image: rkusuma/postfix-sasl-dkim
     environment:
       - MTA_DOMAIN=example.com
       - MTA_HOST=mail.example.com
