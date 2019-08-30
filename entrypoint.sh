@@ -14,10 +14,6 @@ server() {
     # The domain name that locally-posted mail appears to come from, and that
     # locally posted mail is delivered to. Example: $mydomain
     postconf -e 'myorigin = $mydomain'
-    # My Networks
-    if [ ! -z "$MTA_MYNETWORKS" ]; then
-	postconf -e "mynetworks = $MTA_MYNETWORKS"
-    fi
     # Network style
     postconf -e 'mynetworks_style = host'
     # The list of domains that are delivered via the $local_transport mail
