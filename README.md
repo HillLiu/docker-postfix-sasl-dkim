@@ -1,8 +1,8 @@
-Alpine postfix + dkms + cyrus-sasl
+Alpine postfix + dkim + cyrus-sasl
 ======
 
 ## Docker hub
-  * https://hub.docker.com/r/hillliu/postfix-sasl-dkms
+  * https://hub.docker.com/r/hillliu/postfix-sasl-dkim
 
 ## Test auth
   * docker-compose up
