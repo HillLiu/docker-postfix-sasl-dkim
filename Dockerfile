@@ -21,7 +21,7 @@ RUN  apk update \
 COPY supervisord.conf /etc/supervisord.conf
 COPY rsyslog.conf /etc/rsyslog.conf
 COPY entrypoint.sh /usr/local/bin/
-
+EXPOSE 25 587
 # Run supervisord
 WORKDIR /tmp
 

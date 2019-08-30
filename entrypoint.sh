@@ -50,9 +50,7 @@ server() {
 
     ## SMTP-AUTH configuration
     # The name of the Postfix SMTP server's local SASL authentication realm. (default: empty)
-    if [ ! -z "$MTA_DOMAIN" ]; then
-	postconf -e "smtpd_sasl_local_domain = $MTA_DOMAIN"
-    fi
+    postconf -e 'smtpd_sasl_local_domain ='
     # Enable SASL authentication in the Postfix SMTP server. By default, the
     # Postfix SMTP server does not use authentication.
     postconf -e 'smtpd_sasl_auth_enable = yes'
@@ -218,7 +216,6 @@ EOF
     echo "OpenDKIM: Configuring Postfix..."
     postconf -e 'smtpd_milters = inet:127.0.0.1:8891'
     postconf -e 'non_smtpd_milters=$smtpd_milters'
-    postconf -e 'milter_protocol=2'
     postconf -e 'milter_default_action=accept'
 
     echo "fixed alias"
