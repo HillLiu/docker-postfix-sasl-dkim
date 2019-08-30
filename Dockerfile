@@ -18,13 +18,10 @@ RUN  apk update \
       && (rm -rf /var/cache/apk/* 2>/dev/null || true)
 
 # Set up configuration
-COPY ./conf/supervisord.conf /etc/supervisord.conf
-COPY ./conf/rsyslog.conf /etc/rsyslog.conf
-COPY ./support/entrypoint.sh /usr/local/bin/
-
-# Volume
-VOLUME /etc/opendkim/keys
-
+COPY supervisord.conf /etc/supervisord.conf
+COPY rsyslog.conf /etc/rsyslog.conf
+COPY entrypoint.sh /usr/local/bin/
+EXPOSE 25 587
 # Run supervisord
 WORKDIR /tmp
 ENTRYPOINT ["entrypoint.sh"]
