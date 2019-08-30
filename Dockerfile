@@ -10,7 +10,11 @@ RUN  apk update \
        opendkim-utils \
        ca-certificates \
        supervisor \
-      && (rm /tmp/* 2>/dev/null || true) \
+       rsyslog \
+       musl \
+       musl-utils \
+       nano \
+      && (rm "/tmp/"* 2>/dev/null || true) \
       && (rm -rf /var/cache/apk/* 2>/dev/null || true)
 
 # Set up configuration
