@@ -14,6 +14,10 @@ server() {
     # The domain name that locally-posted mail appears to come from, and that
     # locally posted mail is delivered to. Example: $mydomain
     postconf -e 'myorigin = $mydomain'
+    # My Networks
+    if [ ! -z "$MTA_MYNETWORKS" ]; then
+	postconf -e "mynetworks = $MTA_MYNETWORKS"
+    fi
     # Network style
     postconf -e 'mynetworks_style = host'
     # The list of domains that are delivered via the $local_transport mail
@@ -46,7 +50,9 @@ server() {
 
     ## SMTP-AUTH configuration
     # The name of the Postfix SMTP server's local SASL authentication realm. (default: empty)
-    postconf -e 'smtpd_sasl_local_domain ='
+    if [ ! -z "$MTA_DOMAIN" ]; then
+	postconf -e "smtpd_sasl_local_domain = $MTA_DOMAIN"
+    fi
     # Enable SASL authentication in the Postfix SMTP server. By default, the
     # Postfix SMTP server does not use authentication.
     postconf -e 'smtpd_sasl_auth_enable = yes'
