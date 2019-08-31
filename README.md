@@ -10,11 +10,11 @@ Alpine postfix + dkim + cyrus-sasl
   * apk add busybox-extras
   * telnet localhost 25
   * EHLO mail.example.com
-  * AUTH PLAIN AHRlc3RfdXNlcgB0ZXN0X3Bhc3N3b3Jk
+  * AUTH PLAIN AHRlc3RfdXNlckBtYWlsLmV4YW1wbGUuY29tAHRlc3RfcGFzc3dvcmQ=
 
 ### get password with base64
 ```
-echo -ne '\000test_user\000test_password' | openssl base64
+echo -ne '\000test_user@mail.example.com\000test_password' | openssl base64
 ```
 
 ## Test send mail
