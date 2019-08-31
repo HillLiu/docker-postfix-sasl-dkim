@@ -1,4 +1,4 @@
-Alpine postfix + dkim + cyrus-sasl
+Alpine postfix + cyrus-sasl + dkim
 ======
 
 ## Docker hub
@@ -23,6 +23,8 @@ echo -ne '\000test_user@mail.example.com\000test_password' | openssl base64
   * RCPT TO: your@mail.example.com
   * data
   * Subject: test message
+  * From:
+  * To:
   * press enter twice
   * /* Wirte something */
   * .
