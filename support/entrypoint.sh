@@ -44,7 +44,6 @@ server() {
     postconf -e 'smtpd_error_sleep_time = 30'
     postconf -e 'smtpd_soft_error_limit = 10'
     postconf -e 'smtpd_hard_error_limit = 20'
-    postconf -e 'smtpd_client_connection_rate_limit = 0'
 
     ## SMTP-AUTH configuration
     # The name of the Postfix SMTP server's local SASL authentication realm. (default: empty)
@@ -202,21 +201,25 @@ EOF
 
 # Set by docker-postfix
 *@${MTA_DOMAIN} ${DKIM_SELECTOR}._domainkey.${MTA_DOMAIN}
+*@${MTA_HOST} ${DKIM_SELECTOR}._domainkey.${MTA_DOMAIN}
 EOF
 
     echo "OpenDKIM: Configuring $DKIM_TRUSTED_HOSTS..."
     cat >> $DKIM_TRUSTED_HOSTS <<EOF
-
 # Set by docker-postfix
 *.${MTA_DOMAIN}
+*.${MTA_HOST}
 EOF
+
+    cat $DKIM_TRUSTED_HOSTS
+    echo "" 
 
     echo "OpenDKIM: Configuring Postfix..."
     postconf -e 'smtpd_milters = inet:127.0.0.1:8891'
     postconf -e 'non_smtpd_milters=$smtpd_milters'
     postconf -e 'milter_default_action=accept'
 
-    echo "fixed alias"
+    echo "Postfix: Fixed aliases."
     touch /etc/aliases
     newaliases
 
