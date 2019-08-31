@@ -14,7 +14,7 @@ Alpine postfix + dkim + cyrus-sasl
 
 ### get password with base64
 ```
-echo -ne '\000test_user@example.com\000test_password' | openssl base64
+echo -ne '\000test_user@mail.example.com\000test_password' | openssl base64
 ```
 
 ## Test send mail
