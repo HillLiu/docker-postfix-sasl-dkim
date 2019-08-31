@@ -119,7 +119,7 @@ EOF
 	postconf -e 'smtp_tls_security_level = may'
 
 	# TLS activity logging
-	if [ -n "$DEBUG" ]; then
+	if [[ -n "$DEBUG" && "x$DEBUG" != "xoff" ]]; then
 	    postconf -e 'smtpd_tls_loglevel = 2'
 	    postconf -e 'smtp_tls_loglevel = 2'
 	else

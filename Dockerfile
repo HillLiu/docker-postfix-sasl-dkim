@@ -21,8 +21,10 @@ COPY supervisord.conf /etc/supervisord.conf
 COPY rsyslog.conf /etc/rsyslog.conf
 COPY entrypoint.sh /usr/local/bin/
 
+# Volume
+VOLUME /etc/opendkim/keys
+
 # Run supervisord
 WORKDIR /tmp
-
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["server"]

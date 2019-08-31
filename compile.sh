@@ -25,7 +25,12 @@ push(){
 }
 
 build(){
-  docker-compose -f build.yml build $1
+  if [ -z "$1" ]; then
+    NO_CACHE=""
+  else  
+    NO_CACHE="--no-cache"
+  fi  
+  docker build ${NO_CACHE} -f ${DIR}/Dockerfile -t $sourceImage ${DIR}
 }
 
 save() {
@@ -55,11 +60,11 @@ case "$1" in
     build --no-cache
     ;;
   auto)
-    build 
+    build $2
     tag
     ;;
   b)  
-    build
+    build $2
     ;;
   *)
     echo "$0 [save|restore|p|t|nocache|auto|b]" 
