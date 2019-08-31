@@ -30,3 +30,11 @@ echo -ne '\000test_user@mail.example.com\000test_password' | openssl base64
   * .
   * QUIT
 
+## use script
+```
+#!/bin/bash
+
+DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+
+${DIR}/support/sendemail -f test@mail.example.com  -t $1 -s localhost -xu test_user@mail.example.com -xp test_password -u test-subject -m test-body
+```
