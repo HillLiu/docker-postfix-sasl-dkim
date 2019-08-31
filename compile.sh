@@ -1,8 +1,8 @@
 #!/bin/bash
 
 DIR="$( cd "$(dirname "$0")" ; pwd -P )"
-sourceImage=`./sourceImage.sh`
-targetImage=`./targetImage.sh`
+sourceImage=`${DIR}/support/sourceImage.sh`
+targetImage=`${DIR}/support/targetImage.sh`
 archiveFile=$DIR/archive.tar
 
 tag(){

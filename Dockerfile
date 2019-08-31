@@ -17,9 +17,9 @@ RUN  apk update \
       && (rm -rf /var/cache/apk/* 2>/dev/null || true)
 
 # Set up configuration
-COPY supervisord.conf /etc/supervisord.conf
-COPY rsyslog.conf /etc/rsyslog.conf
-COPY entrypoint.sh /usr/local/bin/
+COPY ./conf/supervisord.conf /etc/supervisord.conf
+COPY ./conf/rsyslog.conf /etc/rsyslog.conf
+COPY ./support/entrypoint.sh /usr/local/bin/
 
 # Volume
 VOLUME /etc/opendkim/keys
