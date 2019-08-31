@@ -5,6 +5,7 @@ server() {
     # The network interface addresses that this mail system receives mail on.
     # Specify "all" to receive mail on all network interfaces.
     postconf -e 'inet_interfaces = all'
+    postconf -e 'maillog_file = /dev/stdout'
 
     # The internet hostname of this mail system.
     if [ ! -z "$MTA_HOST" ]; then
@@ -43,6 +44,7 @@ server() {
     postconf -e 'smtpd_error_sleep_time = 30'
     postconf -e 'smtpd_soft_error_limit = 10'
     postconf -e 'smtpd_hard_error_limit = 20'
+    postconf -e 'smtpd_client_connection_rate_limit = 0'
 
     ## SMTP-AUTH configuration
     # The name of the Postfix SMTP server's local SASL authentication realm. (default: empty)
