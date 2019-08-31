@@ -1,2 +1,4 @@
 archive.tar
-sample/data
+data
+test-send-mail.sh
+.env

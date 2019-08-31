@@ -4,9 +4,12 @@ services:
   mail:
     image: hillliu/postfix-sasl-dkim
     environment:
-      - MTA_DOMAIN=example.com
-      - MTA_HOST=mail.example.com
-      - MTA_USERS=test_user:test_password
-      - DEBUG=true
+      - MTA_DOMAIN=${MTA_DOMAIN}
+      - MTA_HOST=${MTA_HOST}
+      - MTA_USERS=${MTA_USER}:${MTA_PASSWORD}
+      - DEBUG=${DEBUG}
+    volumes:    
+      - "${DKIM_DATA:-./data/dkim}:/etc/opendkim/keys" 
+      - "${TLS_DATA:-./data/tls}:/etc/postfix/tls" 
     ports:
       - "${MAIL_PORT:-25}:25"
