@@ -19,9 +19,9 @@ echo -ne '\000test_user@mail.example.com\000test_password' | openssl base64
 
 ## Test send mail
   * HELO mail.example.com
-  * mail from: test@example.com
-  * rcpt to: your@example.com 
+  * MAIL FROM: test@example.com
+  * RCPT TO: your@example.com 
   * data
   * .
-  * done
+  * QUIT
 
