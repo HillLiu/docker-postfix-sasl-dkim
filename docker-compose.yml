@@ -6,7 +6,8 @@ services:
     environment:
       - MTA_DOMAIN=${MTA_DOMAIN}
       - MTA_HOST=${MTA_HOST}
-      - MTA_USERS=${MTA_USER}:${MTA_PASSWORD}
+      - MTA_USER=${MTA_USER}
+      - MTA_PASSWORD=${MTA_PASSWORD}
       - DEBUG=${DEBUG}
     volumes:    
       - "${DKIM_DATA:-./data/dkim}:/etc/opendkim/keys" 

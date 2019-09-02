@@ -75,9 +75,7 @@ auxprop_plugin: sasldb
 mech_list: PLAIN LOGIN CRAM-MD5 DIGEST-MD5 NTLM
 EOF
     # Generate sasldb2
-    echo $MTA_USERS | tr , \\n | while IFS=':' read -r _user _password; do
-	echo $_password | saslpasswd2 -p -c -u $MTA_HOST $_user
-    done
+    echo $MTA_PASSWORD | saslpasswd2 -p -c -u $MTA_HOST $MTA_USER
     chown postfix:postfix -R /etc/sasl2
 
     ## TLS configuration
