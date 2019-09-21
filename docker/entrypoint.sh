@@ -181,6 +181,7 @@ Selector	    ${DKIM_SELECTOR}
 Domain              ${MTA_DOMAIN}
 KeyFile             ${DKIM_KEYDIR}/${DKIM_SELECTOR}.private
 Canonicalization    relaxed/simple
+SenderHeaders       Sender,From
 ExternalIgnoreList  refile:${DKIM_TRUSTED_HOSTS}
 InternalHosts       refile:${DKIM_TRUSTED_HOSTS}
 KeyTable            refile:${DKIM_KEY_TABLE}
@@ -228,12 +229,14 @@ EOF
     postconf -e 'polite_destination_rate_delay = 20'
     postconf -e 'polite_destination_recipient_limit = 5'
     postconf -e 'turtle_destination_concurrency_limit = 2'
-    postconf -e 'turtle_destination_rate_delay = 1s'
+    postconf -e 'turtle_destination_rate_delay = 5s'
     postconf -e 'turtle_destination_recipient_limit = 2'
     postconf -e 'bounce_notice_recipient = vmail@localhost'
     postconf -e 'error_notice_recipient = vmail@localhost'
     postconf -e 'notify_classes = bounce, policy'
     postconf -e 'sender_canonical_maps = regexp:/etc/postfix/sender_canonical'
+    postconf -M polite/unix="polite unix - - n - - smtp"
+    postconf -M turtle/unix="turtle unix - - n - - smtp"
 
 
     echo "Postfix: Fixed aliases."
