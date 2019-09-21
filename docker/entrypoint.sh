@@ -202,6 +202,10 @@ EOF
 *@${MTA_HOST} ${DKIM_SELECTOR}._domainkey.${MTA_DOMAIN}
 EOF
 
+for host in ${MORE_HOST} ; do
+   echo  "*@${host} ${DKIM_SELECTOR}._domainkey.${MTA_DOMAIN}" >> $DKIM_SIGNING_TABLE
+done
+
     echo "OpenDKIM: Configuring $DKIM_TRUSTED_HOSTS..."
     cat >> $DKIM_TRUSTED_HOSTS <<EOF
 # Set by docker-postfix
@@ -218,10 +222,10 @@ EOF
     postconf -e 'milter_default_action=accept'
 
     postconf -e 'transport_maps = hash:/etc/postfix/transport'
-    postconf -e 'smtp_destination_concurrency_limit = 4'
-    postconf -e 'smtp_extra_recipient_limit = 2'
-    postconf -e 'polite_destination_concurrency_limit = 3'
-    postconf -e 'polite_destination_rate_delay = 0'
+    postconf -e 'smtp_destination_concurrency_limit = 5'
+    postconf -e 'smtp_extra_recipient_limit = 20'
+    postconf -e 'polite_destination_concurrency_limit = 5'
+    postconf -e 'polite_destination_rate_delay = 20'
     postconf -e 'polite_destination_recipient_limit = 5'
     postconf -e 'turtle_destination_concurrency_limit = 2'
     postconf -e 'turtle_destination_rate_delay = 1s'
@@ -229,6 +233,7 @@ EOF
     postconf -e 'bounce_notice_recipient = vmail@localhost'
     postconf -e 'error_notice_recipient = vmail@localhost'
     postconf -e 'notify_classes = bounce, policy'
+    postconf -e 'sender_canonical_maps = regexp:/etc/postfix/sender_canonical'
 
 
     echo "Postfix: Fixed aliases."
@@ -238,6 +243,9 @@ EOF
     postmap /etc/postfix/transport
     echo "vmail@localhost	devnull" > /etc/postfix/virtual
     postmap /etc/postfix/virtual
+    cat >> /etc/postfix/sender_canonical <<EOF
+/.*/    postman@${MTA_DOMAIN}
+EOF
 
     ## Launch
     exec supervisord -c /etc/supervisord.conf
