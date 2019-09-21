@@ -234,7 +234,10 @@ EOF
     echo "Postfix: Fixed aliases."
     touch /etc/aliases
     newaliases
+    chown root:root -R /etc/postfix/transport
     postmap /etc/postfix/transport
+    echo "vmail@localhost	devnull" > /etc/postfix/virtual
+    postmap /etc/postfix/virtual
 
     ## Launch
     exec supervisord -c /etc/supervisord.conf
