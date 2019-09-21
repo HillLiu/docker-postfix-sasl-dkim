@@ -217,9 +217,24 @@ EOF
     postconf -e 'non_smtpd_milters=$smtpd_milters'
     postconf -e 'milter_default_action=accept'
 
+    postconf -e 'transport_maps = hash:/etc/postfix/transport'
+    postconf -e 'smtp_destination_concurrency_limit = 4'
+    postconf -e 'smtp_extra_recipient_limit = 2'
+    postconf -e 'polite_destination_concurrency_limit = 3'
+    postconf -e 'polite_destination_rate_delay = 0'
+    postconf -e 'polite_destination_recipient_limit = 5'
+    postconf -e 'turtle_destination_concurrency_limit = 2'
+    postconf -e 'turtle_destination_rate_delay = 1s'
+    postconf -e 'turtle_destination_recipient_limit = 2'
+    postconf -e 'bounce_notice_recipient = vmail@localhost'
+    postconf -e 'error_notice_recipient = vmail@localhost'
+    postconf -e 'notify_classes = bounce, policy'
+
+
     echo "Postfix: Fixed aliases."
     touch /etc/aliases
     newaliases
+    postmap /etc/postfix/transport
 
     ## Launch
     exec supervisord -c /etc/supervisord.conf

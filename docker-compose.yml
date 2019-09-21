@@ -12,5 +12,6 @@ services:
     volumes:    
       - "${DKIM_DATA:-./data/dkim}:/etc/opendkim/keys" 
       - "${TLS_DATA:-./data/tls}:/etc/postfix/tls" 
+      - "${POSTFIX_DATA:-./data/postfix}:/var/spool/postfix"
     ports:
       - "${MAIL_PORT:-25}:25"

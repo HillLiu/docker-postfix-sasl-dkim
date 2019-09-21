@@ -1,0 +1,4 @@
+vmail: /dev/null
+root: vmail
+double-bounce: vmail
+bouncedmail: vmail

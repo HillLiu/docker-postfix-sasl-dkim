@@ -16,7 +16,9 @@ RUN  apk update \
 # Set up configuration
 COPY ./conf/supervisord.conf /etc/supervisord.conf
 COPY ./conf/rsyslog.conf /etc/rsyslog.conf
-COPY ./support/entrypoint.sh /usr/local/bin/
+COPY ./conf/transport /etc/postfix/transport 
+COPY ./conf/aliases /etc/aliases 
+COPY ./entrypoint.sh /usr/local/bin/
 
 # Volume
 VOLUME /etc/opendkim/keys
