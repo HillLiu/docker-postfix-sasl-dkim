@@ -222,7 +222,9 @@ EOF
     postconf -e 'non_smtpd_milters=$smtpd_milters'
     postconf -e 'milter_default_action=accept'
 
+    echo "Config Limit..."
     postconf -e 'transport_maps = hash:/etc/postfix/transport'
+    postconf -e 'queue_run_delay = 32m'
     postconf -e 'smtp_destination_concurrency_limit = 5'
     postconf -e 'smtp_extra_recipient_limit = 20'
     postconf -e 'polite_destination_concurrency_limit = 5'
