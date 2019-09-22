@@ -231,12 +231,13 @@ EOF
     postconf -e 'turtle_destination_concurrency_limit = 2'
     postconf -e 'turtle_destination_rate_delay = 92s'
     postconf -e 'turtle_destination_recipient_limit = 2'
+    postconf -e 'turtle_transport_rate_delay = 92s'
     postconf -e 'bounce_notice_recipient = vmail@localhost'
     postconf -e 'error_notice_recipient = vmail@localhost'
     postconf -e 'notify_classes = bounce, policy'
     postconf -e 'sender_canonical_maps = regexp:/etc/postfix/sender_canonical'
     postconf -M polite/unix="polite unix - - n - - smtp"
-    postconf -M turtle/unix="turtle unix - - n - - smtp"
+    postconf -M turtle/unix="turtle unix - - n - 1 smtp"
 
 
     echo "Postfix: Fixed aliases."
