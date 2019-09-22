@@ -248,7 +248,7 @@ EOF
     echo "vmail@localhost	devnull" > /etc/postfix/virtual
     postmap /etc/postfix/virtual
     cat >> /etc/postfix/sender_canonical <<EOF
-/.*/    postman@${MTA_DOMAIN}
+/.*/    postmaster@${MTA_DOMAIN}
 EOF
 
     ## Launch
