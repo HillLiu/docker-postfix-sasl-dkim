@@ -5,3 +5,4 @@ double-bounce: vmail
 bouncedmail: vmail
 service: vmail
 postmaster: vmail
+postman: vmail
