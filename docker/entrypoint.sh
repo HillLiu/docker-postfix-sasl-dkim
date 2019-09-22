@@ -225,9 +225,9 @@ EOF
     echo "Config Limit..."
     postconf -e 'transport_maps = hash:/etc/postfix/transport'
     postconf -e 'queue_run_delay = 32m'
-    postconf -e 'smtp_destination_concurrency_limit = 5'
+    postconf -e 'smtp_destination_concurrency_limit = 20'
     postconf -e 'smtp_extra_recipient_limit = 20'
-    postconf -e 'polite_destination_concurrency_limit = 5'
+    postconf -e 'polite_destination_concurrency_limit = 15'
     postconf -e 'polite_destination_rate_delay = 20'
     postconf -e 'polite_destination_recipient_limit = 5'
     postconf -e 'turtle_destination_concurrency_limit = 2'
