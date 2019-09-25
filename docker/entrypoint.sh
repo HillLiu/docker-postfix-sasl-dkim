@@ -231,7 +231,7 @@ EOF
     postconf -e 'polite_destination_recipient_limit = 10'
     postconf -e 'turtle_destination_concurrency_limit = 1'
     postconf -e 'turtle_destination_rate_delay = 12s'
-    postconf -e 'turtle_transport_rate_delay = 12s'
+    postconf -e 'turtle_transport_rate_delay = 7s'
     postconf -e 'turtle_destination_recipient_limit = 2'
     postconf -e 'bounce_notice_recipient = vmail@localhost'
     postconf -e 'error_notice_recipient = vmail@localhost'
