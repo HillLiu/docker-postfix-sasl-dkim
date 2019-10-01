@@ -5,7 +5,6 @@ server() {
     # The network interface addresses that this mail system receives mail on.
     # Specify "all" to receive mail on all network interfaces.
     postconf -e 'inet_interfaces = all'
-    postconf -e 'maillog_file = /dev/stdout'
 
     # The internet hostname of this mail system.
     if [ ! -z "$MTA_HOST" ]; then
