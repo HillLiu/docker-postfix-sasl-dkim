@@ -2,3 +2,4 @@ archive.tar
 data
 test-send-mail.sh
 .env
+haproxy-mail/haproxy.cfg

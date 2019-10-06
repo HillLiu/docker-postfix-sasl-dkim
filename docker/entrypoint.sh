@@ -236,8 +236,15 @@ EOF
     postconf -e 'error_notice_recipient = vmail@localhost'
     postconf -e 'notify_classes = bounce, policy'
     postconf -e 'sender_canonical_maps = regexp:/etc/postfix/sender_canonical'
-    postconf -M polite/unix="polite unix - - n - - smtp"
-    postconf -M turtle/unix="turtle unix - - n - 1 smtp"
+    postconf -M polite/unix='polite unix - - n - - smtp'
+    postconf -M turtle/unix='turtle unix - - n - 1 smtp'
+
+# haproxy
+    if [[ ! -z "$HAPROXY_ENABLED" && "x$HAPROXY_ENABLED" != "xoff" ]]; then
+      postconf -e 'postscreen_upstream_proxy_protocol = haproxy'
+      postconf -M smtp/inet='smtp inet n - n - 1 postscreen'
+      postconf -M smtpd/pass='smtpd pass - - n - - smtpd'
+    fi
 
 
     echo "Postfix: Fixed aliases."

@@ -1,6 +1,16 @@
 version: '3'
 
 services:
+  haproxy:
+    image: haproxy:alpine
+    restart: always
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - mail
+    ports:
+      - "${MAIL_PORT:-25}:25"
+      - 1936:1936
   mail:
     image: hillliu/postfix-sasl-dkim
     restart: always
@@ -11,11 +21,9 @@ services:
       - MTA_PASSWORD=${MTA_PASSWORD}
       - MORE_HOST=${MORE_HOST}
       - DEBUG=${DEBUG}
-      - HAPROXY_ENABLED=${HAPROXY_ENABLED:-off}
-    volumes:    
+      - HAPROXY_ENABLED=${HAPROXY_ENABLED:-on}
+    volumes:
       - "${DKIM_DATA:-./data/dkim}:/etc/opendkim/keys"
       - "${TLS_DATA:-./data/tls}:/etc/postfix/tls"
       - "${POSTFIX_DATA:-./data/postfix}:/var/spool/postfix"
       - "${POSTFIX_LOGS:-./data/logs}:/var/log/mail"
-    ports:
-      - "${MAIL_PORT:-25}:25"
