@@ -258,6 +258,11 @@ EOF
 /.*/    postmaster@${MTA_DOMAIN}
 EOF
 
+    if [ ! -e "/var/log/mail/maillog" ]; then
+      mkdir /var/log/mail
+      echo '' > /var/log/mail/maillog
+    fi
+
     ## Launch
     exec supervisord -c /etc/supervisord.conf
 }
