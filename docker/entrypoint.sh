@@ -224,20 +224,25 @@ EOF
     echo "Config Limit..."
     postconf -e 'transport_maps = hash:/etc/postfix/transport'
     postconf -e 'queue_run_delay = 32m'
-    postconf -e 'smtp_destination_concurrency_limit = 1'
+    postconf -e 'smtp_destination_concurrency_limit = 20'
     postconf -e 'smtp_extra_recipient_limit = 20'
     postconf -e 'polite_destination_concurrency_limit = 10'
     postconf -e 'polite_destination_recipient_limit = 10'
     postconf -e 'turtle_destination_concurrency_limit = 1'
-    postconf -e 'turtle_destination_rate_delay = 12s'
+    postconf -e 'turtle_destination_rate_delay = 7s'
     postconf -e 'turtle_transport_rate_delay = 7s'
     postconf -e 'turtle_destination_recipient_limit = 2'
+    postconf -e 'yturtle_destination_concurrency_limit = 1'
+    postconf -e 'yturtle_destination_rate_delay = 7s'
+    postconf -e 'yturtle_transport_rate_delay = 7s'
+    postconf -e 'yturtle_destination_recipient_limit = 2'
     postconf -e 'bounce_notice_recipient = vmail@localhost'
     postconf -e 'error_notice_recipient = vmail@localhost'
     postconf -e 'notify_classes = bounce, policy'
     postconf -e 'sender_canonical_maps = regexp:/etc/postfix/sender_canonical'
     postconf -M polite/unix='polite unix - - n - - smtp'
     postconf -M turtle/unix='turtle unix - - n - 1 smtp'
+    postconf -M yturtle/unix='yturtle unix - - n - 1 smtp'
 
 # haproxy
     if [[ ! -z "$HAPROXY_ENABLED" && "x$HAPROXY_ENABLED" != "xoff" ]]; then
