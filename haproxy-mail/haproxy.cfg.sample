@@ -27,5 +27,4 @@ listen mail
         balance         roundrobin
         timeout client  3h
         timeout server  3h
-        option          tcplog
-        server          mail1 mail:25 send-proxy check port 25 inter 5s rise 2 fall 3
+        server          mail1 mail:25 send-proxy check port 25
