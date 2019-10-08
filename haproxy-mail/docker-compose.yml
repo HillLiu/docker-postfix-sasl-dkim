@@ -10,7 +10,7 @@ services:
       - mail
     ports:
       - "${MAIL_PORT:-25}:25"
-      - 1936:1936
+      - "${HAPROXY_PORT:-1936}:1936"
   mail:
     image: hillliu/postfix-sasl-dkim
     restart: always
@@ -22,6 +22,8 @@ services:
       - MORE_HOST=${MORE_HOST}
       - DEBUG=${DEBUG}
       - HAPROXY_ENABLED=${HAPROXY_ENABLED:-on}
+    ports:
+      - "${POSTFIX_PORT:-4025}:25"
     volumes:
       - "${DKIM_DATA:-./data/dkim}:/etc/opendkim/keys"
       - "${TLS_DATA:-./data/tls}:/etc/postfix/tls"
