@@ -19,7 +19,7 @@ services:
       - MTA_HOST=${MTA_HOST}
       - MTA_USER=${MTA_USER}
       - MTA_PASSWORD=${MTA_PASSWORD}
-      - MORE_HOST=${MORE_HOST}
+      - MORE_HOST=${MORE_HOST:-}
       - DEBUG=${DEBUG}
       - HAPROXY_ENABLED=${HAPROXY_ENABLED:-on}
     ports:
