@@ -222,6 +222,7 @@ EOF
     postconf -e 'milter_default_action=accept'
 
     echo "Config Limit..."
+    TURTLE_DELAY=${TURTLE_DELAY-17s}
     postconf -e 'transport_maps = hash:/etc/postfix/transport'
     postconf -e 'queue_run_delay = 32m'
     postconf -e 'smtp_destination_concurrency_limit = 20'
@@ -229,12 +230,12 @@ EOF
     postconf -e 'polite_destination_concurrency_limit = 10'
     postconf -e 'polite_destination_recipient_limit = 10'
     postconf -e 'turtle_destination_concurrency_limit = 1'
-    postconf -e 'turtle_destination_rate_delay = 17s'
-    postconf -e 'turtle_transport_rate_delay = 17s'
+    postconf -e "turtle_destination_rate_delay = ${TURTLE_DELAY}"
+    postconf -e "turtle_transport_rate_delay = ${TURTLE_DELAY}"
     postconf -e 'turtle_destination_recipient_limit = 2'
     postconf -e 'yturtle_destination_concurrency_limit = 1'
-    postconf -e 'yturtle_destination_rate_delay = 17s'
-    postconf -e 'yturtle_transport_rate_delay = 17s'
+    postconf -e "yturtle_destination_rate_delay = ${TURTLE_DELAY}"
+    postconf -e "yturtle_transport_rate_delay = ${TURTLE_DELAY}"
     postconf -e 'yturtle_destination_recipient_limit = 2'
     postconf -e 'bounce_notice_recipient = vmail@localhost'
     postconf -e 'error_notice_recipient = vmail@localhost'
