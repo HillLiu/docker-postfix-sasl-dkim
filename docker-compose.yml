@@ -10,7 +10,8 @@ services:
       - MTA_USER=${MTA_USER}
       - MTA_PASSWORD=${MTA_PASSWORD}
       - MORE_HOST=${MORE_HOST:-}
-      - DEBUG=${DEBUG}
+      - TURTLE_DELAY=${TURTLE_DELAY:-}
+      - DEBUG=${DEBUG:-}
       - HAPROXY_ENABLED=${HAPROXY_ENABLED:-off}
     volumes:    
       - "${DKIM_DATA:-./data/dkim}:/etc/opendkim/keys"

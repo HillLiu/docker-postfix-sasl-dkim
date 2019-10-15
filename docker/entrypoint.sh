@@ -202,9 +202,11 @@ EOF
 *@${MTA_HOST} ${DKIM_SELECTOR}._domainkey.${MTA_DOMAIN}
 EOF
 
-for host in ${MORE_HOST} ; do
-   echo  "*@${host} ${DKIM_SELECTOR}._domainkey.${MTA_DOMAIN}" >> $DKIM_SIGNING_TABLE
-done
+if [ ! -z "$MORE_HOST" ]; then
+  for host in ${MORE_HOST} ; do
+     echo  "*@${host} ${DKIM_SELECTOR}._domainkey.${MTA_DOMAIN}" >> $DKIM_SIGNING_TABLE
+  done
+fi
 
     echo "OpenDKIM: Configuring $DKIM_TRUSTED_HOSTS..."
     cat >> $DKIM_TRUSTED_HOSTS <<EOF
@@ -222,7 +224,9 @@ EOF
     postconf -e 'milter_default_action=accept'
 
     echo "Config Limit..."
-    TURTLE_DELAY=${TURTLE_DELAY-17s}
+    if [ -z "$TURTLE_DELAY" ]; then
+      TURTLE_DELAY=17s
+    fi
     postconf -e 'transport_maps = hash:/etc/postfix/transport'
     postconf -e 'queue_run_delay = 32m'
     postconf -e 'smtp_destination_concurrency_limit = 20'
