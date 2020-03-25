@@ -1,5 +1,7 @@
 import sys
 from http import client
+import os
+from urllib.parse import urlparse
 
 STATUS_CODE_MAP = {'431': '2', '450': '5', '452': '2',
                    '510': '1', '511': '1', '512': '1',
@@ -15,8 +17,7 @@ STATUS_CODE_MSG_MAP = {'1': '郵件地址錯誤',
                        '5': '查無使用者',
                        '6': '其他'}
 
-SERVER = "omnisegment.com"
-REPORT_URL = "/ma_account/bounced-email-callback/"
+BOUNCE_CALLBACK_URL = urlparse(os.getenv("BOUNCE_CALLBACK"))
 
 def extract_info():
     cycle_id, audience_id, email_node_id, status_code, status_msg = None, None, None, None, None
@@ -42,6 +43,6 @@ def extract_info():
 
 cycle_id, audience_id, email_node_id, status_code, status_msg = extract_info()
 if cycle_id is not None:
-    conn = client.HTTPSConnection(SERVER)
-    url = f"{REPORT_URL}?cycle={cycle_id}&audience={audience_id}&email_node={email_node_id}"
+    conn = client.HTTPSConnection(BOUNCE_CALLBACK_URL.netloc)
+    url = f"{BOUNCE_CALLBACK_URL.path}?cycle={cycle_id}&audience={audience_id}&email_node={email_node_id}"
     conn.request("GET", url)
