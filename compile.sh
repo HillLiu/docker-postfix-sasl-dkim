@@ -30,7 +30,7 @@ build(){
   else  
     NO_CACHE="--no-cache"
   fi  
-  docker build ${NO_CACHE} -f ${DIR}/Dockerfile -t $sourceImage ${DIR}
+  cd docker && docker build ${NO_CACHE} -f ${DIR}/docker/Dockerfile -t $sourceImage ${DIR}/docker
 }
 
 save() {
