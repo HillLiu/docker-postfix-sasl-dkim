@@ -1,0 +1,7 @@
+devnull: /dev/null
+vmail: devnull
+root: vmail
+double-bounce: vmail
+bouncedmail: vmail
+service: vmail
+postmaster: vmail

@@ -5,7 +5,6 @@ server() {
     # The network interface addresses that this mail system receives mail on.
     # Specify "all" to receive mail on all network interfaces.
     postconf -e 'inet_interfaces = all'
-    postconf -e 'maillog_file = /dev/stdout'
 
     # The internet hostname of this mail system.
     if [ ! -z "$MTA_HOST" ]; then
@@ -181,6 +180,7 @@ Selector	    ${DKIM_SELECTOR}
 Domain              ${MTA_DOMAIN}
 KeyFile             ${DKIM_KEYDIR}/${DKIM_SELECTOR}.private
 Canonicalization    relaxed/simple
+SenderHeaders       Sender,From
 ExternalIgnoreList  refile:${DKIM_TRUSTED_HOSTS}
 InternalHosts       refile:${DKIM_TRUSTED_HOSTS}
 KeyTable            refile:${DKIM_KEY_TABLE}
@@ -202,6 +202,12 @@ EOF
 *@${MTA_HOST} ${DKIM_SELECTOR}._domainkey.${MTA_DOMAIN}
 EOF
 
+if [ ! -z "$MORE_HOST" ]; then
+  for host in ${MORE_HOST} ; do
+     echo  "*@${host} ${DKIM_SELECTOR}._domainkey.${MTA_DOMAIN}" >> $DKIM_SIGNING_TABLE
+  done
+fi
+
     echo "OpenDKIM: Configuring $DKIM_TRUSTED_HOSTS..."
     cat >> $DKIM_TRUSTED_HOSTS <<EOF
 # Set by docker-postfix
@@ -217,9 +223,61 @@ EOF
     postconf -e 'non_smtpd_milters=$smtpd_milters'
     postconf -e 'milter_default_action=accept'
 
+    echo "Config Limit..."
+    if [ -z "$TURTLE_DELAY" ]; then
+      TURTLE_DELAY=17s
+    fi
+    postconf -e 'transport_maps = hash:/etc/postfix/transport'
+    postconf -e 'smtp_destination_concurrency_limit = 20'
+    postconf -e 'smtp_extra_recipient_limit = 20'
+    postconf -e 'polite_destination_concurrency_limit = 10'
+    postconf -e 'polite_destination_recipient_limit = 10'
+    postconf -e 'turtle_destination_concurrency_limit = 1'
+    postconf -e "turtle_destination_rate_delay = ${TURTLE_DELAY}"
+    postconf -e "turtle_transport_rate_delay = ${TURTLE_DELAY}"
+    postconf -e 'turtle_destination_recipient_limit = 2'
+    postconf -e 'yturtle_destination_concurrency_limit = 1'
+    postconf -e "yturtle_destination_rate_delay = ${TURTLE_DELAY}"
+    postconf -e "yturtle_transport_rate_delay = ${TURTLE_DELAY}"
+    postconf -e 'yturtle_destination_recipient_limit = 2'
+    postconf -e 'bounce_notice_recipient = vmail@localhost'
+    postconf -e 'error_notice_recipient = vmail@localhost'
+    postconf -e 'notify_classes = bounce, policy'
+    postconf -e 'sender_canonical_maps = regexp:/etc/postfix/sender_canonical'
+    postconf -M polite/unix='polite unix - - n - - smtp'
+    postconf -M turtle/unix='turtle unix - - n - 1 smtp'
+    postconf -M yturtle/unix='yturtle unix - - n - 1 smtp'
+
+    # queue lifetime
+    postconf -e 'maximal_queue_lifetime = 1d'
+    postconf -e 'maximal_backoff_time = 8h'
+    postconf -e 'minimal_backoff_time = 4h'
+    postconf -e 'queue_run_delay = 4h'    
+
+    # haproxy
+    if [[ ! -z "$HAPROXY_ENABLED" && "x$HAPROXY_ENABLED" != "xoff" ]]; then
+      postconf -e 'postscreen_upstream_proxy_protocol = haproxy'
+      postconf -M smtp/inet='smtp inet n - n - 1 postscreen'
+      postconf -M smtpd/pass='smtpd pass - - n - - smtpd'
+    fi
+
+
     echo "Postfix: Fixed aliases."
     touch /etc/aliases
+    echo 'bouncedmail: "|python3 /usr/local/bin/dropped_mail.py"' >> /etc/aliases
     newaliases
+    chown root:root -R /etc/postfix/transport
+    postmap /etc/postfix/transport
+    echo "vmail@localhost	devnull" > /etc/postfix/virtual
+    postmap /etc/postfix/virtual
+    cat >> /etc/postfix/sender_canonical <<EOF
+/.*/    postmaster@${MTA_DOMAIN}
+EOF
+
+    if [ ! -e "/var/log/mail/maillog" ]; then
+      mkdir /var/log/mail
+      echo '' > /var/log/mail/maillog
+    fi
 
     ## Launch
     exec supervisord -c /etc/supervisord.conf

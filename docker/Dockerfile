@@ -5,23 +5,27 @@ RUN  apk update \
        cyrus-sasl \
        cyrus-sasl-plain \
        cyrus-sasl-login \
+       python3 \
        postfix \
        opendkim \
        opendkim-utils \
        ca-certificates \
        supervisor \
        rsyslog \
-       musl \
-       musl-utils \
-       nano \
-      && (rm "/tmp/"* 2>/dev/null || true) \
+      && (rm /tmp/* 2>/dev/null || true) \
       && (rm -rf /var/cache/apk/* 2>/dev/null || true)
 
 # Set up configuration
-COPY supervisord.conf /etc/supervisord.conf
-COPY rsyslog.conf /etc/rsyslog.conf
-COPY entrypoint.sh /usr/local/bin/
-EXPOSE 25 587
+COPY ./conf/supervisord.conf /etc/supervisord.conf
+COPY ./conf/rsyslog.conf /etc/rsyslog.conf
+COPY ./conf/transport /etc/postfix/transport 
+COPY ./conf/aliases /etc/postfix/aliases 
+COPY ./entrypoint.sh /usr/local/bin/
+COPY ./dropped_email.py /usr/local/bin/
+
+# Volume
+VOLUME /etc/opendkim/keys
+
 # Run supervisord
 WORKDIR /tmp
 ENTRYPOINT ["entrypoint.sh"]
