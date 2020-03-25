@@ -228,7 +228,6 @@ EOF
       TURTLE_DELAY=17s
     fi
     postconf -e 'transport_maps = hash:/etc/postfix/transport'
-    postconf -e 'queue_run_delay = 32m'
     postconf -e 'smtp_destination_concurrency_limit = 20'
     postconf -e 'smtp_extra_recipient_limit = 20'
     postconf -e 'polite_destination_concurrency_limit = 10'
@@ -249,7 +248,13 @@ EOF
     postconf -M turtle/unix='turtle unix - - n - 1 smtp'
     postconf -M yturtle/unix='yturtle unix - - n - 1 smtp'
 
-# haproxy
+    # queue lifetime
+    postconf -e 'maximal_queue_lifetime = 1d'
+    postconf -e 'maximal_backoff_time = 8h'
+    postconf -e 'minimal_backoff_time = 4h'
+    postconf -e 'queue_run_delay = 4h'    
+
+    # haproxy
     if [[ ! -z "$HAPROXY_ENABLED" && "x$HAPROXY_ENABLED" != "xoff" ]]; then
       postconf -e 'postscreen_upstream_proxy_protocol = haproxy'
       postconf -M smtp/inet='smtp inet n - n - 1 postscreen'
@@ -259,6 +264,7 @@ EOF
 
     echo "Postfix: Fixed aliases."
     touch /etc/aliases
+    echo 'bouncedmail: "|python3 /usr/local/bin/dropped_mail.py"' >> /etc/aliases
     newaliases
     chown root:root -R /etc/postfix/transport
     postmap /etc/postfix/transport

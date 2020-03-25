@@ -5,6 +5,7 @@ RUN  apk update \
        cyrus-sasl \
        cyrus-sasl-plain \
        cyrus-sasl-login \
+       python3 \
        postfix \
        opendkim \
        opendkim-utils \
@@ -20,6 +21,7 @@ COPY ./conf/rsyslog.conf /etc/rsyslog.conf
 COPY ./conf/transport /etc/postfix/transport 
 COPY ./conf/aliases /etc/postfix/aliases 
 COPY ./entrypoint.sh /usr/local/bin/
+COPY ./dropped_email.py /usr/local/bin/
 
 # Volume
 VOLUME /etc/opendkim/keys
